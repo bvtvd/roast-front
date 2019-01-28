@@ -5,3 +5,19 @@
  * time: 14:45
  */
 
+require('es6-promise').polyfill()
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+import {cafes} from './modules/cafes'
+
+Vue.use(Vuex)
+
+/**
+ * export the data source
+ */
+export default new Vuex.Store({
+    modules: {
+        cafes
+    }
+})
