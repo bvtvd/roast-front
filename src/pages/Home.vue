@@ -12,7 +12,6 @@
 <script>
     export default {
         created() {
-            this.$store.dispatch( 'loadCafes' );
         },
         computed: {
             // 获取 cafes 加载状态

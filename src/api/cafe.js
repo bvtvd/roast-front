@@ -36,6 +36,7 @@ export default {
             address: address,
             city: city,
             zip: zip,
+            state: state
         })
     }
 }

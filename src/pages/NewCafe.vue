@@ -7,26 +7,31 @@
                         <label>Name
                             <input type="text" placeholder="咖啡店名" v-model="name">
                         </label>
+                        <span class="validation" v-show="!validations.name.is_valid">{{ validations.name.text }}</span>
                     </div>
                     <div class="large-12 medium-12 small-12 cell">
                         <label>Address
                             <input type="text" placeholder="地址" v-model="address">
                         </label>
+                        <span class="validation" v-show="!validations.address.is_valid">{{ validations.address.text }}</span>
                     </div>
                     <div class="large-12 medium-12 small-12 cell">
                         <label>City
                             <input type="text" placeholder="城市" v-model="city">
                         </label>
+                        <span class="validation" v-show="!validations.city.is_valid">{{ validations.city.text }}</span>
                     </div>
                     <div class="large-12 medium-12 small-12 cell">
                         <label>State
                             <input type="text" placeholder="省份" v-model="state">
                         </label>
+                        <span class="validation" v-show="!validations.state.is_valid">{{ validations.state.text }}</span>
                     </div>
                     <div class="large-12 medium-12 small-12 cell">
                         <label>Zip
                             <input type="text" placeholder="邮编" v-model="zip">
                         </label>
+                        <span class="validation" v-show="!validations.zip.is_valid">{{ validations.zip.text }}</span>
                     </div>
                     <div class="large-12 medium-12 small-12 cell">
                         <a class="button" @click="submitNewCafe">提交</a>
@@ -46,18 +51,102 @@
                 address: '',
                 city: '',
                 state: '',
-                zip: ''
+                zip: '',
+                validations: {
+                    name: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    address: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    city: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    state: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    zip: {
+                        is_valid: true,
+                        text: ''
+                    },
+                }
             }
         },
         methods: {
+            /**
+             * 表单验证
+             * @returns {boolean}
+             */
+            validateNewCafe(){
+                let validateNewCafeForm = true;
+
+                // 手写验证是麻烦
+                if (this.name.trim() === ''){
+                    validateNewCafeForm = false;
+                    this.validations.name.is_valid = false;
+                    this.validations.name.text = '请输入咖啡店的名字';
+                }else{
+                    this.validations.name.is_valid = true;
+                    this.validations.name.text = '';
+                }
+
+                if (this.address.trim() === ''){
+                    validateNewCafeForm = false;
+                    this.validations.address.is_valid = false;
+                    this.validations.address.text = '请输入咖啡店的地址';
+                }else{
+                    this.validations.address.is_valid = true;
+                    this.validations.address.text = '';
+                }
+
+                if (this.city.trim() === ''){
+                    validateNewCafeForm = false;
+                    this.validations.city.is_valid = false;
+                    this.validations.city.text = '请输入咖啡店所在城市';
+                }else{
+                    this.validations.city.is_valid = true;
+                    this.validations.city.text = '';
+                }
+
+                if (this.state.trim() === ''){
+                    validateNewCafeForm = false;
+                    this.validations.state.is_valid = false;
+                    this.validations.state.text = '请输入咖啡店所在省份';
+                }else{
+                    this.validations.state.is_valid = true;
+                    this.validations.state.text = '';
+                }
+
+                if (this.zip.trim() === ''){
+                    validateNewCafeForm = false;
+                    this.validations.zip.is_valid = false;
+                    this.validations.zip.text = '请输入有效的邮编地址';
+                }else{
+                    this.validations.zip.is_valid = true;
+                    this.validations.zip.text = '';
+                }
+
+                return validateNewCafeForm;
+            },
+            /**
+             * 提交表单
+             */
             submitNewCafe() {
-                this.$store.dispatch('addCafe', {
-                    name: this.name,
-                    address: this.address,
-                    city: this.city,
-                    state: this.state,
-                    zip: this.zip
-                })
+
+                // if(this.validateNewCafe()){
+                    this.$store.dispatch('addCafe', {
+                        name: this.name,
+                        address: this.address,
+                        city: this.city,
+                        state: this.state,
+                        zip: this.zip
+                    })
+                // }
+
             }
         }
     }

@@ -3,6 +3,7 @@ import router from './routes'
 import {CONFIG} from './config'
 import store from './store'
 import App from '@/App'
+import Qs from 'qs'
 
 Vue.config.productionTip = false
 
@@ -15,6 +16,18 @@ window.axios = require('axios');
 
 // window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.baseURL = CONFIG.API_URL;
+
+// 请求拦截器
+window.axios.interceptors.request.use( (config) => {
+    if (config.method=="post"){
+        config.data = Qs.stringify(config.data);
+        config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
+    return config;
+},  (error) => {
+    return Promise.reject(error);
+});
+
 
 new Vue({
     router,
