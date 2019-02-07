@@ -30,13 +30,13 @@ export default {
      * @param zip
      * @returns {*}
      */
-    postAddNewCafe: (name, address, city, state, zip) => {
+    postAddNewCafe: (name, locations, website, description, roaster) => {
         return axios.post("cafes", {
             name: name,
-            address: address,
-            city: city,
-            zip: zip,
-            state: state
+            locations: locations,
+            website: website,
+            description: description,
+            roaster: roaster
         })
     }
 }
