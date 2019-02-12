@@ -108,6 +108,9 @@
         computed: {
             brewMethods() {
                 return this.$store.getters.getBrewMethods;
+            },
+            addCafeStatus() {
+                return this.$store.getters.getCafeAddStatus
             }
         },
         created() {
@@ -235,6 +238,41 @@
             removeLocation(key){
                 this.locations.splice(key, 1);
                 this.validations.locations.splice(key, 1);
+            },
+            clearForm() {
+                this.name = '';
+                this.locations = []
+                this.website = ''
+                this.description = ''
+                this.roaster = false;
+                this.validations = {
+                    name: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    locations: [],
+                    oneLocation: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    website: {
+                        is_valid: true,
+                        text: ''
+                    }
+                }
+
+                this.addLocation()
+            }
+        },
+        watch: {
+            'addCafeStatus': () => {
+                if(this.addCafeStatus === 2){
+                    this.clearForm()
+                    $('#cafe-added-successfully').show().delay(5000).fadeOut();
+                }
+                if(this.addCafeStatus === 3) {
+                    $('#cafe-added-unsuccessfully').show().delay(5000).fadeOut();
+                }
             }
         }
     }
