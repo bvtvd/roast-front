@@ -38,6 +38,14 @@ export default {
             description: description,
             roaster: roaster
         })
+    },
+
+    postLikeCafe: (cafeId) => {
+        return axios.post('cafes/' + cafeId + '/like')
+    },
+
+    deleteLikeCafe: (cafeId) => {
+        return axios.delete('cafes/' + cafeId + '/like')
     }
 }
 

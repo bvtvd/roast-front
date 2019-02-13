@@ -17,6 +17,11 @@ export const cafes = {
         cafeLoadStatus: 0,
 
         cafeAddStatus: 0,
+
+        cafeLikeActionStatus: 0,
+        cafeUnlikeActionStatus: 0,
+
+        cafeLiked: false
     },
     actions: {
         loadCafes({commit}){
@@ -35,6 +40,11 @@ export const cafes = {
 
             CafeApi.getCafe(data.id).then(response => {
                 commit('setCafe', response.data);
+
+                if(response.data.user_like){
+                    commit('setCafeLoadStatus', 2)
+                }
+
                 commit('setCafeLoadStatus', 2);
             }).catch(() => {
                 commit('setCafe', {})
@@ -51,6 +61,30 @@ export const cafes = {
                 })
                 .catch(() => {
                     commit('setCafeAddStatus', 3)
+                })
+        },
+        likeCafe({commit, state}, data){
+            commit('setCafeLikeActionStatus', 1);
+
+            CafeApi.postLikeCafe(data.id)
+                .then(response => {
+                    commit('setCafeLikedStatus', true)
+                    commit('setCafeLikeActionStatus', 2)
+                })
+                .catch(() => {
+                    commit('setCafeLikeActionStatus', 3)
+                })
+        },
+        unlikeCafe({commit, state}, data) {
+            commit('setCafeUnlikeActionStatus', 1);
+
+            CafeApi.deleteLikeCafe(data.id)
+                .then(response => {
+                    commit('setCafeLikedStatus', false);
+                    commit('setCafeUnlikeActionStatus', 2);
+                })
+                .catch(() => {
+                    commit('setCafeUnlikeActionStatus', 3);
                 })
         }
     },
@@ -70,6 +104,15 @@ export const cafes = {
         setCafeAddStatus(state, status){
             state.cafeAddStatus = status;
         },
+        setCafeLikedStatus(state, status){
+            state.cafeLiked = status;
+        },
+        setCafeLikeActionStatus(state, status) {
+            state.cafeLikeActionStatus = status;
+        },
+        setCafeUnlikeActionStatus(state, status) {
+            state.cafeUnlikeActionStatus = status;
+        }
     },
     getters: {
         getCafesLoadStatus(state) {
@@ -86,6 +129,15 @@ export const cafes = {
         },
         getCafeAddStatus(state){
             return state.cafeAddStatus;
+        },
+        getCafeLikedStatus(state) {
+            return state.cafeLiked;
+        },
+        getCafeLikeActionStatus(state) {
+            return state.cafeLikeActionStatus;
+        },
+        getCafeUnlikeActionStatus(state) {
+            return state.cafeUnlikeActionStatus;
         }
     }
 }
