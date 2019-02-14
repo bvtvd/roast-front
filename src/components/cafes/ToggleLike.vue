@@ -1,16 +1,16 @@
 <template>
     <span class="toggle-like">
-        <span class="like" @click="likeCafe()" v-if="!liked && cafeLoadStatus === 2 && cafeLikeActionStatus !== 1 && cafeUnlikeActionStatus !== 1">
+        <span class="like like-toggle" @click="likeCafe()" v-if="!liked && cafeLoadStatus === 2 && cafeLikeActionStatus !== 1 && cafeUnlikeActionStatus !== 1">
             喜欢
         </span>
-        <span class="un-like" @click="unlikeCafe()" v-if="liked && cafeLoadStatus === 2 && cafeLikeActionStaus !== 1 && cafeUnlikeActionStatus !== 1">
+        <span class="un-like like-toggle" @click="unlikeCafe()" v-if="liked && cafeLoadStatus === 2 && cafeLikeActionStatus !== 1 && cafeUnlikeActionStatus !== 1">
             取消喜欢
         </span>
 
         <loader v-show="cafeLikeActionStatus ===1 || cafeUnlikeActionStatus === 1"
             :width="30"
-                :height="30"
-                display="inline-block"
+            :height="30"
+            display="inline-block"
         >
         </loader>
     </span>
@@ -64,20 +64,20 @@
         text-align: center;
         margin-top: 30px;
 
-        span.like-toggle {
+        .like-toggle {
             display: inline-block;
             font-weight: bold;
             text-decoration: underline;
             font-size: 20px;
             cursor: pointer;
+        }
 
-            &.like {
-                color: $dark-success;
-            }
+        .like {
+            color: $dark-success;
+        }
 
-            &.un-like {
-                color: $dark-failure;
-            }
+        .un-like {
+            color: $dark-failure;
         }
     }
 </style>

@@ -15,6 +15,7 @@ export default new VueRouter({
         {
             path: '/',
             name: 'layout',
+            redirect: '/home',
             component: resolve => {
                 require(['@/pages/Layout.vue'], resolve)
             }, //Vue.component('Home', require('./pages/Layout.vue')),
@@ -37,7 +38,7 @@ export default new VueRouter({
                 },
                 {
                     path: '/cafes/new',
-                    name: 'newcafe',
+                    name: 'newCafe',
                     // component: Vue.component('NewCafe', require('./pages/NewCafe.vue'))
                     component: resolve => {
                         require(['@/pages/NewCafe.vue'], resolve)

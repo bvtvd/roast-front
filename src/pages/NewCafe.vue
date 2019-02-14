@@ -61,6 +61,9 @@
                             </span>
                         </div>
                         <div class="large-12 medium-12 small-12 cell">
+                            <tags-input :unique="key"></tags-input>
+                        </div>
+                        <div class="large-12 medium-12 small-12 cell">
                             <a class="button" @click="removeLocation(key)">移除位置</a>
                         </div>
                     </div>
@@ -79,8 +82,14 @@
 </template>
 
 <script>
+    import TagsInput from '../components/global/forms/TagsInput'
+    import {EventBus} from "../event-bus";
+
     export default {
         name: "NewCafe",
+        components: {
+            TagsInput,
+        },
         data() {
             return {
                 name: "",
@@ -117,6 +126,11 @@
             this.addLocation()
             console.log(this.validations)
         },
+        mounted() {
+            EventBus.$on('tags-edited', function(tagsAdd){
+                this.locations[tagsAdd.unique].tags = tagsAdd.tags;
+            }.bind(this))
+        },
         methods: {
             /**
              * 表单验证
@@ -136,10 +150,10 @@
                 }
 
                 // 验证网址是否是有效信息
-                if(this.website.trim() !== '' && !this.website.match(/^((https?):\/\/)?([w|W]{3}\.)+[a-zA-Z0-9\-\.]{3,}\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$/)){
+                if(this.website.trim() !== '' && !this.website.match(/^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?$/)){
                     validateNewCafeForm = false;
                     this.validations.website.is_valid = false;
-                    this.validations.website.text = '请输入咖啡店的名字';
+                    this.validations.website.text = '请输入咖啡店网址';
                 }else{
                     this.validations.website.is_valid = true;
                     this.validations.website.text = '';
@@ -177,10 +191,10 @@
                             this.validations.locations[index].state.text = '';
                         }
 
-                        if(this.locations[index].zip.trim() === '' || !this.locations[index].zip.match(/(^d{6}$)/)){
+                        if(this.locations[index].zip.trim() === '' || !this.locations[index].zip.match(/(^\d{6}$)/)){
                             validateNewCafeForm = false;
                             this.validations.locations[index].zip.is_valid = false;
-                            this.validations.locations[index].zip.text = '请输入省份';
+                            this.validations.locations[index].zip.text = '请输入邮编';
                         }else{
                             this.validations.locations[index].zip.is_valid = true;
                             this.validations.locations[index].zip.text = '';
@@ -195,7 +209,7 @@
              */
             submitNewCafe() {
 
-                // if(this.validateNewCafe()){
+                if(this.validateNewCafe()){
                     this.$store.dispatch('addCafe', {
                         name: this.name,
                         locations: this.locations,
@@ -203,7 +217,7 @@
                         description: this.description,
                         roaster: this.roaster
                     })
-                // }
+                }
 
             },
             addLocation(){
@@ -213,7 +227,8 @@
                     city: '',
                     state: '',
                     zip: '',
-                    methodsAvailable: []
+                    methodsAvailable: [],
+                    tags: []
                 })
 
                 this.validations.locations.push({
@@ -262,10 +277,11 @@
                 }
 
                 this.addLocation()
+                EventBus.$emit('clear-tags')
             }
         },
         watch: {
-            'addCafeStatus': () => {
+            addCafeStatus: function() {
                 if(this.addCafeStatus === 2){
                     this.clearForm()
                     $('#cafe-added-successfully').show().delay(5000).fadeOut();
