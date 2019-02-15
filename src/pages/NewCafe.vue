@@ -124,7 +124,6 @@
         },
         created() {
             this.addLocation()
-            console.log(this.validations)
         },
         mounted() {
             EventBus.$on('tags-edited', function(tagsAdd){

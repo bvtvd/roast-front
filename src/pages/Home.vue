@@ -3,7 +3,8 @@
         <div class="grid-container">
             <div class="grid-x">
                 <div class="large-12 medium-12 small-12 columns">
-                    <router-link :to="{name: 'newCafe'}" class="add-cafe-button">+ 新增咖啡店</router-link>
+                    <router-link :to="{name: 'newCafe'}" class="add-cafe-button" v-if="user !== '' && userLoadStatus === 2">+ 新增咖啡店</router-link>
+                    <a calss="add-cafe-text" v-if="user === '' && userLoadStatus === 2" @click="login()">登录后添加咖啡店</a>
                 </div>
             </div>
         </div>
@@ -23,6 +24,7 @@
     import CafeFilter from '../components/cafes/CafeFilter'
     import CafeCard from '../components/cafes/CafeCard'
     import Loader from '../components/global/Loader'
+    import {EventBus} from "../event-bus";
 
     export default {
         created() {
@@ -41,6 +43,20 @@
             // 获取 cafes
             cafes(){
                 return this.$store.getters.getCafes;
+            },
+            // 从 Vuex 中获取用户加载状态
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
+            },
+
+            // 从 Vuex 中获取用户信息
+            user() {
+                return this.$store.getters.getUser;
+            },
+        },
+        methods: {
+            login() {
+                EventBus.$emit('prompt-login');
             }
         }
     }

@@ -13,12 +13,18 @@
         </ul>
 
         <div class="right">
-            <img class="avatar" :src="user.avatar" v-show="userLoadStatus == 2">
+            <img class="avatar" :src="user.avatar" v-show="userLoadStatus === 2" v-if="user != '' && userLoadStatus === 2">
+
+            <span class="logout" v-if="user != '' && userLoadStatus === 2" @click="logout()">退出</span>
+
+            <span class="login" v-if="user == ''" @click="login()">登录</span>
         </div>
     </nav>
 </template>
 
 <script>
+    import {EventBus} from "../../event-bus";
+
     export default {
         computed: {
             userLoadStatus(){
@@ -26,8 +32,17 @@
                 return this.$store.getters.getUserLoadStatus;
             },
             user(){
-                return {}
+                return '';
                 return this.$store.getters.getUser;
+            }
+        },
+        methods: {
+            login() {
+                EventBus.$emit('prompt-login');
+            },
+            logout() {
+                this.$store.dispatch('logoutUser');
+                window.location = '/logout';
             }
         }
     }
@@ -88,6 +103,22 @@
                 border-radius: 40px;
                 margin-top: 5px;
                 margin-right: 10px;
+            }
+            &:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            span.login {
+                font-family: "Lato", sans-serif;
+                font-size: 16px;
+                text-transform: uppercase;
+                color: black;
+                font-weight: bold;
+                float: right;
+                margin-top: 27px;
+                margin-right: 15px;
+                cursor: pointer;
             }
         }
 

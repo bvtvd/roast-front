@@ -13,7 +13,8 @@
 
                         <div class="grid-x">
                             <div class="large-12 medium-12 small-12 cell">
-                                <toggle-like></toggle-like>
+                                <toggle-like v-if="user !== '' && userLoadStatus === 2"></toggle-like>
+                                <a class="prompt-login" v-if="user === ''  && userLoadStatus === 2" @click="login()">登录后喜欢该咖啡店</a>
                             </div>
                         </div>
 
@@ -60,7 +61,7 @@
     import Loader from '../components/global/Loader.vue';
     import IndividualCafeMap from '../components/cafes/IndividualCafeMap.vue';
     import ToggleLike from  '../components/cafes/ToggleLike.vue';
-
+    import {EventBus} from '../event-bus.js';
 
     export default {
         name: "Cafe",
@@ -80,7 +81,22 @@
             },
             cafe() {
                 return this.$store.getters.getCafe;
-            }
+            },
+            // 从 Vuex 中获取用户加载状态
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
+            },
+
+            // 从 Vuex 中获取用户信息
+            user() {
+                return '';
+                return this.$store.getters.getUser;
+            },
+        },
+        methods: {
+            login() {
+                EventBus.$emit('prompt-login');
+            },
         }
     }
 </script>

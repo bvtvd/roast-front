@@ -41,9 +41,7 @@ export const cafes = {
             CafeApi.getCafe(data.id).then(response => {
                 commit('setCafe', response.data);
 
-                if(response.data.user_like){
-                    commit('setCafeLoadStatus', 2)
-                }
+                commit('setCafeLikedStatus', response.data.user_like)
 
                 commit('setCafeLoadStatus', 2);
             }).catch(() => {
