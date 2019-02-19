@@ -19,15 +19,17 @@ window.axios.defaults.baseURL = CONFIG.API_URL;
 
 // 请求拦截器
 window.axios.interceptors.request.use( (config) => {
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+
     if (config.method=="post"){
         // config.data = Qs.stringify(config.data);
         config.headers['Content-Type'] = 'application/json';
     }
+
     return config;
 },  (error) => {
     return Promise.reject(error);
 });
-
 
 new Vue({
     router,

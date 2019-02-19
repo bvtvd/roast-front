@@ -32,7 +32,6 @@
                 return this.$store.getters.getUserLoadStatus;
             },
             user(){
-                return '';
                 return this.$store.getters.getUser;
             }
         },

@@ -1,9 +1,32 @@
 <template>
-    <div id="login-modal" v-show="show" v-on:click="show = false">
+    <div id="login-modal" v-show="show">
         <div class="login-box">
-            <a href="/auth/github" v-on:click.stop="">
-                <img src="/storage/img/github-login.jpg"/>
-            </a>
+            <div class="grid-container">
+                <div class="grid-x grid-padding-x">
+                    <div class="large-12 medium-12 small-12 cell">
+                        <label>用户名
+                            <input type="text" placeholder="用户名" v-model="username">
+                        </label>
+
+                    </div>
+                    <div class="large-12 medium-12 small-12 cell">
+                        <label>密码
+                            <input type="text" placeholder="密码" v-model="password">
+                        </label>
+
+                    </div>
+                    <div class="grid-x grid-padding-x">
+                        <div class="large-4 medium-4 small-4 cell">
+                            <a class="button" @click="login">登录</a>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-padding-x">
+                        <div class="large-4 medium-4 small-4 cell">
+                            <a class="button" @click="show = false">取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -15,13 +38,27 @@
         name: "LoginModal",
         data() {
             return {
-                show: false
+                show: false,
+                username: '',
+                password: '',
             }
         },
         mounted() {
             EventBus.$on('prompt-login', function(){
                 this.show = true;
             }.bind(this))
+        },
+        methods: {
+            login() {
+                this.$store.dispatch("login", {
+                    username: this.username,
+                    password: this.password,
+                }).then(response => {
+                    console.log('then')
+                    this.$store.dispatch("loadUser");
+                    this.show = false;
+                })
+            }
         }
     }
 </script>

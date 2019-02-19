@@ -16,6 +16,10 @@
             LoginModal
         },
         created(){
+            if(localStorage.getItem("token")){
+                this.$store.dispatch("loadUser");
+            }
+            
             this.$store.dispatch('loadCafes');
             this.$store.dispatch('loadBrewMethods');
         }
